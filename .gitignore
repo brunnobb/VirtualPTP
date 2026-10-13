@@ -48,3 +48,6 @@ $RECYCLE.BIN/
 # Installer intermediates
 *.wixobj
 *.wixpdb
+
+Dist/
+

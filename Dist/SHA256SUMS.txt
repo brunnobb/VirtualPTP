@@ -1,2 +1,0 @@
-da578f140f7fbd3900924604cd316251c7cf353ecf68ee2071cca9231556005e  VirtualPtpDriver-Setup-v1.1.6.msi
-da578f140f7fbd3900924604cd316251c7cf353ecf68ee2071cca9231556005e  VirtualPtpDriver-Setup.msi
