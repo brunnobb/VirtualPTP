@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <?ifndef LicenseRtf ?>
+  <?define LicenseRtf = "..\License.rtf" ?>
+  <?endif ?>
+  <Product Id="*"
+           Name="Logitech T650 Virtual Precision Touchpad Driver"
+           Language="1033"
+           Version="1.1.6.0"
+           Manufacturer="Logitech T650 Community Project"
+           UpgradeCode="71E9D2E0-72E7-4AD2-8498-27041365E996">
+
+    <Package InstallerVersion="405"
+             Compressed="yes"
+             InstallScope="perMachine"
+             Platform="x64"
+             Description="Logitech T650 Virtual Precision Touchpad (UMDF 2) Driver Package"
+             Comments="Registers virtual Precision Touchpad device for direct Windows Touch Stack injection" />
+
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+    <MediaTemplate EmbedCab="yes" />
+
+    <!-- Application Icon -->
+    <Icon Id="DriverIcon.ico" SourceFile="$(var.IconPath)" />
+    <Property Id="ARPPRODUCTICON" Value="DriverIcon.ico" />
+    <Property Id="ARPHELPLINK" Value="https://github.com/brunnobb/VirtualPTP" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/brunnobb/VirtualPTP" />
+
+    <!-- Directory Layout -->
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFiles64Folder">
+        <Directory Id="CompanyFolder" Name="Logitech T650 PTP">
+          <Directory Id="INSTALLFOLDER" Name="Driver" />
+        </Directory>
+      </Directory>
+
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="Logitech T650 PTP">
+          <Directory Id="DriverShortcutsFolder" Name="Driver" />
+        </Directory>
+      </Directory>
+    </Directory>
+
+    <!-- Component 1: Driver Package Files -->
+    <DirectoryRef Id="INSTALLFOLDER">
+      <Component Id="DriverPackageComponent" Guid="58C053C5-04B8-4801-9389-B04718C5B4CF" Win64="yes">
+        <File Id="VirtualPtpDriverDll" Source="$(var.SourceDir)\VirtualPtpDriver.dll" KeyPath="yes" />
+        <File Id="VirtualPtpDriverInf" Source="$(var.SourceDir)\VirtualPtpDriver.inf" />
+        <File Id="VirtualPtpDriverCat" Source="$(var.SourceDir)\virtualptpdriver.cat" />
+        <File Id="T650TestCert" Source="$(var.SourceDir)\T650TestCert.cer" />
+        <File Id="DevconExe" Source="$(var.SourceDir)\devcon.exe" />
+        <File Id="InstallPs1" Source="$(var.SourceDir)\InstallDriver.ps1" />
+        <File Id="UninstallPs1" Source="$(var.SourceDir)\UninstallDriver.ps1" />
+        <File Id="InstallCmd" Source="$(var.ActionDir)\InstallAction.cmd" />
+        <File Id="UninstallCmd" Source="$(var.ActionDir)\UninstallAction.cmd" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Component 2: Start Menu Shortcuts -->
+    <DirectoryRef Id="DriverShortcutsFolder">
+      <Component Id="DriverShortcutsComponent" Guid="6F7531C4-D62E-4B89-B8D9-A6A5BA3FA5CA" Win64="yes">
+        <Shortcut Id="InstallDriverShortcut"
+                  Name="Configure or Reinstall Driver (Admin)"
+                  Description="Installs driver certificate and registers Virtual PTP device"
+                  Target="[INSTALLFOLDER]InstallAction.cmd"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="DriverIcon.ico" />
+
+        <Shortcut Id="UninstallDriverShortcut"
+                  Name="Uninstall Driver Device (Admin)"
+                  Description="Removes Virtual PTP device and driver store entry"
+                  Target="[INSTALLFOLDER]UninstallAction.cmd"
+                  WorkingDirectory="INSTALLFOLDER"
+                  Icon="DriverIcon.ico" />
+
+        <RemoveFolder Id="RemoveDriverShortcutsFolder" On="uninstall" />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" Directory="ApplicationProgramsFolder" On="uninstall" />
+
+        <RegistryValue Root="HKCU"
+                       Key="Software\LogitechT650Ptp\Driver"
+                       Name="Installed"
+                       Type="integer"
+                       Value="1"
+                       KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <!-- Features -->
+    <Feature Id="DriverFeature" Title="Virtual PTP Driver" Level="1">
+      <ComponentRef Id="DriverPackageComponent" />
+      <ComponentRef Id="DriverShortcutsComponent" />
+    </Feature>
+
+    <!-- Custom Actions: Automated Driver Registration and Cleanup -->
+    <CustomAction Id="InstallDriverAction"
+                  Directory="INSTALLFOLDER"
+                  ExeCommand="&quot;[SystemFolder]cmd.exe&quot; /c &quot;[INSTALLFOLDER]InstallAction.cmd&quot;"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="ignore" />
+
+    <CustomAction Id="UninstallDriverAction"
+                  Directory="INSTALLFOLDER"
+                  ExeCommand="&quot;[SystemFolder]cmd.exe&quot; /c &quot;[INSTALLFOLDER]UninstallAction.cmd&quot;"
+                  Execute="deferred"
+                  Impersonate="no"
+                  Return="ignore" />
+
+    <InstallExecuteSequence>
+      <Custom Action="InstallDriverAction" Before="InstallFinalize">NOT Installed OR REINSTALL</Custom>
+      <Custom Action="UninstallDriverAction" Before="RemoveFiles">(NOT UPGRADINGPRODUCTCODE) AND (REMOVE="ALL")</Custom>
+    </InstallExecuteSequence>
+
+    <!-- UI Configuration -->
+    <Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(var.LicenseRtf)" />
+    <UIRef Id="WixUI_InstallDir" />
+
+  </Product>
+</Wix>
+
+
+
+
+
+
+
+
+
+
+

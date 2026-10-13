@@ -1,0 +1,50 @@
+# Visual Studio & IDE files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.opensdf
+*.sdf
+*.VC.db
+*.VC.opendb
+
+# Build Outputs
+[Bb]in/
+[Oo]bj/
+x64/
+x86/
+ARM64/
+Debug/
+Release/
+ipch/
+
+# Driver Build Artifacts & Packages
+*.sys
+_reboots.log
+*.wdf
+*.lastcodeanalysissucceeded
+DriverTest/
+
+# Logs & Temporary files
+*.log
+*.tlog
+*.tmp
+*.bak
+*.cache
+*.intermediate
+*.ilk
+*.pdb
+*.exp
+*.lib
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+
+# Installer intermediates
+*.wixobj
+*.wixpdb

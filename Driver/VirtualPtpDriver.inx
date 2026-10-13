@@ -1,0 +1,83 @@
+;
+; VirtualPtpDriver.inf
+; Installation file for Logitech T650 Virtual Precision Touchpad Driver (UMDF 2 HID Minidriver)
+;
+
+[Version]
+Signature   = "$WINDOWS NT$"
+Class       = HIDClass
+ClassGuid   = {745a17a0-74d3-11d0-b6fe-00a0c90f57da}
+Provider    = %ProviderString%
+CatalogFile = VirtualPtpDriver.cat
+DriverVer   = 10/10/2026,1.1.6.0
+PnpLockDown = 1
+
+[DestinationDirs]
+DefaultDestDir = 13
+
+[SourceDisksNames]
+1 = %DiskName%,,,""
+
+[SourceDisksFiles]
+VirtualPtpDriver.dll = 1,,
+
+[Manufacturer]
+%ManufacturerString% = Standard,NT$ARCH$.10.0...16299
+
+[Standard.NT$ARCH$.10.0...16299]
+%DeviceDesc% = VirtualPtpDriver_Install, Root\T650VirtualPtp
+
+[VirtualPtpDriver_Install.NT]
+CopyFiles = VirtualPtpDriver_Files
+
+[VirtualPtpDriver_Files]
+VirtualPtpDriver.dll
+
+[VirtualPtpDriver_Install.NT.HW]
+AddReg = VirtualPtpDriver_Install_HW.AddReg
+
+[VirtualPtpDriver_Install_HW.AddReg]
+HKR,,"LowerFilters",0x00010000,"WUDFRd"
+
+[VirtualPtpDriver_Install.NT.Services]
+AddService = mshidumdf, 0x000001fa, MSHIDUMDF_ServiceInstall
+AddService = WUDFRd,    0x000001f8, WUDFRD_ServiceInstall
+
+[MSHIDUMDF_ServiceInstall]
+ServiceType   = 1                  ; SERVICE_KERNEL_DRIVER
+StartType     = 3                  ; SERVICE_DEMAND_START
+ErrorControl  = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\mshidumdf.sys
+
+[WUDFRD_ServiceInstall]
+DisplayName   = %WudfRdDisplayName%
+ServiceType   = 1                  ; SERVICE_KERNEL_DRIVER
+StartType     = 3                  ; SERVICE_DEMAND_START
+ErrorControl  = 1                  ; SERVICE_ERROR_NORMAL
+ServiceBinary = %12%\WUDFRd.sys
+
+[VirtualPtpDriver_Install.NT.Wdf]
+UmdfService                 = VirtualPtpDriver, VirtualPtpDriver_Install_Umdf
+UmdfServiceOrder            = VirtualPtpDriver
+UmdfKernelModeClientPolicy  = AllowKernelModeClients
+UmdfMethodNeitherAction     = Copy
+UmdfFileObjectPolicy        = AllowNullAndUnknownFileObjects
+UmdfFsContextUsePolicy      = CanUseFsContext2
+
+[VirtualPtpDriver_Install_Umdf]
+UmdfLibraryVersion = 2.15.0
+ServiceBinary      = %13%\VirtualPtpDriver.dll
+
+[Strings]
+ManufacturerString = "Logitech T650 Community Project"
+ProviderString     = "Logitech T650 Community Project"
+DiskName           = "Logitech T650 Virtual Precision Touchpad Driver Disk"
+DeviceDesc         = "Logitech T650 Precision Touchpad (Virtual PTP)"
+WudfRdDisplayName  = "Windows Driver Foundation - User-mode Driver Framework Reflector"
+
+
+
+
+
+
+
