@@ -9,7 +9,7 @@ Class       = HIDClass
 ClassGuid   = {745a17a0-74d3-11d0-b6fe-00a0c90f57da}
 Provider    = %ProviderString%
 CatalogFile = VirtualPtpDriver.cat
-DriverVer   = 10/12/2026,1.1.7.0
+DriverVer   = 10/14/2026,1.1.9.0
 PnpLockDown = 1
 
 [DestinationDirs]
@@ -74,6 +74,7 @@ ProviderString     = "Logitech T650 Community Project"
 DiskName           = "Logitech T650 Virtual Precision Touchpad Driver Disk"
 DeviceDesc         = "Logitech T650 Precision Touchpad (Virtual PTP)"
 WudfRdDisplayName  = "Windows Driver Foundation - User-mode Driver Framework Reflector"
+
 
 
 

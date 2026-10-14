@@ -6,7 +6,7 @@
   <Product Id="*"
            Name="Logitech T650 Virtual Precision Touchpad Driver"
            Language="1033"
-           Version="1.1.7.0"
+           Version="1.1.9.0"
            Manufacturer="Logitech T650 Community Project"
            UpgradeCode="71E9D2E0-72E7-4AD2-8498-27041365E996">
 
@@ -119,6 +119,7 @@
 
   </Product>
 </Wix>
+
 
 
 
